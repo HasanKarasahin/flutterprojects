@@ -1,9 +1,26 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:newsApp/data/news_service.dart';
 import 'package:newsApp/models/article.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void main() {
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+// Import the firebase_core plugin
+import 'package:firebase_core/firebase_core.dart';
+
+// ignore: unused_import
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+// ignore: unused_import
+import 'dart:ui' as ui;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -17,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Haberler'),
+      home: MyHomePage(title: 'Haberler2'),
     );
   }
 }
@@ -33,9 +50,31 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Articles> articles = [];
 
+  void getTabName() async {
+    CollectionReference moviesRef = _firestore.collection("Settings");
+    var BottomNavBarNamesRef = moviesRef.doc("BottomNavBarNames");
+    var response = await BottomNavBarNamesRef.get();
+    dynamic data = response.data();
+
+    for (int i = 0; i < 3; i++) {
+      tabs[i] = data["Tab" + (i + 1).toString()];
+    }
+  }
+
+  void getNewLink() async {
+    CollectionReference moviesRef = _firestore.collection("Settings");
+    var BottomNavBarNamesRef = moviesRef.doc("NewsLink");
+    var response = await BottomNavBarNamesRef.get();
+    dynamic data = response.data();
+
+    for (int i = 0; i < 3; i++) {
+      tabsUrl[i] = data["Tab" + (i + 1).toString()];
+    }
+  }
+
   @override
   void initState() {
-    NewsService.getNews(0).then((value) {
+    NewsService.getNews(0, tabsUrl[0]).then((value) {
       setState(() {
         articles = value;
       });
@@ -43,11 +82,17 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+  final _firestore = FirebaseFirestore.instance;
+
+  List<String> tabs = ["", "", ""];
+  List<String> tabsUrl = ["", "", ""];
+
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      NewsService.getNews(_selectedIndex).then((value) {
+      NewsService.getNews(_selectedIndex, tabsUrl[_selectedIndex])
+          .then((value) {
         setState(() {
           articles = value;
         });
@@ -57,6 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getTabName();
+    AsyncSnapshot.waiting();
+    getNewLink();
+    AsyncSnapshot.waiting();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -87,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               onPressed: () async {
                                 await launch(articles[index].url ?? '');
                               },
-                              child: Text('Habere Git1')),
+                              child: Text('Habere Git')),
                         ],
                       ),
                     ],
@@ -95,18 +145,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               })),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Anasayfa',
+            label: tabs[0],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Ekonomi',
+            label: tabs[1],
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sports),
-            label: 'Spor',
+            label: tabs[2],
           ),
         ],
         currentIndex: _selectedIndex,

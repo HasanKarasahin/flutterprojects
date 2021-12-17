@@ -12,18 +12,8 @@ class NewsService {
     return _singleton;
   }
 
-  //https://newsapi.org/v2/everything?q=apple&from=2021-11-21&to=2021-11-21&sortBy=popularity&language=tr&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab
-  //https://newsapi.org/v2/top-headlines?country=tr&category=business&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab
-  //https://newsapi.org/v2/top-headlines?country=tr&category=sport&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab
-
-  static List<String> newsTypes = [
-    'https://newsapi.org/v2/everything?q=apple&from=2021-11-21&to=2021-11-21&sortBy=popularity&language=tr&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab',
-    'https://newsapi.org/v2/top-headlines?country=tr&category=business&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab',
-    'https://newsapi.org/v2/top-headlines?country=tr&category=sport&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab'
-  ];
-
-  static Future<List<Articles>> getNews(int index) async {
-    String url = newsTypes.elementAt(index);
+  static Future<List<Articles>> getNews(int index, String url) async {
+    //String url = newsTypes.elementAt(index);
 
     final response = await http.get(url);
 
