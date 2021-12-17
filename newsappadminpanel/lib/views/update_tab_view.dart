@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:newsappadminpanel/models/book_model.dart';
+import 'package:newsappadminpanel/models/tab_model.dart';
 import 'package:newsappadminpanel/services/calculator.dart';
-import 'package:newsappadminpanel/views/update_book_view_model.dart';
+import 'package:newsappadminpanel/views/update_tab_view_model.dart';
 import 'package:provider/provider.dart';
 
 class UpdateBookView extends StatefulWidget {
-  final Book book;
+  final TabModel book;
 
-  const UpdateBookView({required this.book});
+  const UpdateBookView(TabModel list, {required this.book});
 
   @override
   _UpdateBookViewState createState() => _UpdateBookViewState();
@@ -30,14 +30,14 @@ class _UpdateBookViewState extends State<UpdateBookView> {
 
   @override
   Widget build(BuildContext context) {
-    bookCtr.text = widget.book.bookName;
-    authorCtr.text = widget.book.authorName;
+    bookCtr.text = widget.book.tabName;
+    authorCtr.text = widget.book.tabUrl;
     publishCtr.text = "a";
 
     return ChangeNotifierProvider<UpdateBookViewModel>(
       create: (_) => UpdateBookViewModel(),
       builder: (context, _) => Scaffold(
-        appBar: AppBar(title: Text('Kitap Bilgisi Güncelle')),
+        appBar: AppBar(title: Text('Tab Bilgisini Güncelle')),
         body: Container(
           padding: EdgeInsets.all(15),
           child: Form(
@@ -95,9 +95,9 @@ class _UpdateBookViewState extends State<UpdateBookView> {
                     if (_formKey.currentState!.validate()) {
                       /// kulanıcı bilgileri ile addNewBook metodu çağırılacak,
                       await context.read<UpdateBookViewModel>().updateBook(
-                          bookName: bookCtr.text,
-                          authorName: authorCtr.text,
-                          publishDate: "a",
+                          tabName: bookCtr.text,
+                          tabUrl: authorCtr.text,
+                          tabIcon: "a",
                           book: widget.book);
 
                       /// navigator.pop

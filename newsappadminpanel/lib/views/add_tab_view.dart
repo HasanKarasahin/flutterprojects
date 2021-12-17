@@ -1,5 +1,5 @@
 import 'package:newsappadminpanel/services/calculator.dart';
-import 'package:newsappadminpanel/views/add_book_view_model.dart';
+import 'package:newsappadminpanel/views/add_tab_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +13,6 @@ class _AddBookViewState extends State<AddBookView> {
   TextEditingController authorCtr = TextEditingController();
   TextEditingController publishCtr = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var _selectedDate = "Test";
 
   @override
   void dispose() {
@@ -65,9 +64,9 @@ class _AddBookViewState extends State<AddBookView> {
                     if (_formKey.currentState!.validate()) {
                       /// kulanıcı bilgileri ile addNewBook metodu çağırılacak,
                       await context.read<AddBookViewModel>().addNewBook(
-                          bookName: bookCtr.text,
-                          authorName: authorCtr.text,
-                          publishDate: _selectedDate);
+                          tabName: bookCtr.text,
+                          tabUrl: authorCtr.text,
+                          tabIcon: "_selectedDat");
 
                       /// navigator.pop
                       Navigator.pop(context);

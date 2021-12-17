@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:newsappadminpanel/models/book_model.dart';
+import 'package:newsappadminpanel/models/tab_model.dart';
 
 class Database {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -22,7 +22,7 @@ class Database {
       required Map<String, dynamic> bookAsMap}) async {
     await _firestore
         .collection(collectionPath)
-        .doc(Book.fromMap(bookAsMap).id)
+        .doc(TabModel.fromMap(bookAsMap).id)
         .set(bookAsMap);
   }
 }

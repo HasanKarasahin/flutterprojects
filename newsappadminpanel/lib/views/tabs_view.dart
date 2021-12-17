@@ -1,12 +1,12 @@
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:newsappadminpanel/models/book_model.dart';
-import 'package:newsappadminpanel/views/books_view_model.dart';
-import 'package:newsappadminpanel/views/update_book_view.dart';
+import 'package:newsappadminpanel/models/tab_model.dart';
+import 'package:newsappadminpanel/views/tabs_view_model.dart';
+import 'package:newsappadminpanel/views/update_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-import 'add_book_view.dart';
+import 'add_tab_view.dart';
 
 class BooksView extends StatefulWidget {
   @override
@@ -20,10 +20,10 @@ class _BooksViewState extends State<BooksView> {
       create: (_) => BooksViewModel(),
       builder: (context, child) => Scaffold(
         backgroundColor: Colors.grey[200],
-        appBar: AppBar(title: Text('KİTAP LİSTESİ')),
+        appBar: AppBar(title: Text('Tab Listesi')),
         body: Center(
           child: Column(children: [
-            StreamBuilder<List<Book>>(
+            StreamBuilder<List<TabModel>>(
               stream: Provider.of<BooksViewModel>(context, listen: false)
                   .getBookList(),
               builder: (context, asyncSnapshot) {
@@ -36,7 +36,7 @@ class _BooksViewState extends State<BooksView> {
                   if (!asyncSnapshot.hasData) {
                     return CircularProgressIndicator();
                   } else {
-                    List<Book>? kitapList = asyncSnapshot.data;
+                    List<TabModel>? kitapList = asyncSnapshot.data;
                     if (kitapList != null) {
                       return BuildListView(
                         kitapList: kitapList,
@@ -69,7 +69,7 @@ class BuildListView extends StatefulWidget {
     required this.kitapList,
   }) : super(key: key);
 
-  final List<Book> kitapList;
+  final List<TabModel> kitapList;
 
   @override
   _BuildListViewState createState() => _BuildListViewState();
@@ -77,7 +77,7 @@ class BuildListView extends StatefulWidget {
 
 class _BuildListViewState extends State<BuildListView> {
   bool isFiltering = false;
-  late List<Book> filteredList;
+  late List<TabModel> filteredList;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class _BuildListViewState extends State<BuildListView> {
 
                   setState(() {
                     filteredList = fullList
-                        .where((book) => book.bookName
+                        .where((book) => book.tabName
                             .toLowerCase()
                             .contains(query.toLowerCase()))
                         .toList();
@@ -121,8 +121,17 @@ class _BuildListViewState extends State<BuildListView> {
                   return Slidable(
                     child: Card(
                       child: ListTile(
-                        title: Text(list[index].bookName),
-                        subtitle: Text(list[index].authorName),
+                        title: Text(list[index].tabName),
+                        subtitle: Text(list[index].tabUrl),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdateBookView(
+                                        list[index],
+                                        book: list[index],
+                                      )));
+                        },
                       ),
                     ),
                   );
