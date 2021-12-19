@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-import 'add_tab_view.dart';
 
 class BooksView extends StatefulWidget {
   @override
@@ -16,49 +15,41 @@ class BooksView extends StatefulWidget {
 class _BooksViewState extends State<BooksView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<BooksViewModel>(
-      create: (_) => BooksViewModel(),
+    return ChangeNotifierProvider<TabViewModel>(
+      create: (_) => TabViewModel(),
       builder: (context, child) => Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(title: Text('Tab Listesi')),
-        body: Center(
-          child: Column(children: [
-            StreamBuilder<List<TabModel>>(
-              stream: Provider.of<BooksViewModel>(context, listen: false)
-                  .getBookList(),
-              builder: (context, asyncSnapshot) {
-                if (asyncSnapshot.hasError) {
-                  print(asyncSnapshot.error);
-                  return const Center(
-                      child:
-                          Text('Bir Hata Oluştu, daha sonra tekrar deneyiniz'));
-                } else {
-                  if (!asyncSnapshot.hasData) {
-                    return CircularProgressIndicator();
+          backgroundColor: Colors.grey[200],
+          appBar: AppBar(title: Text('Admin Paneli - Tab Listesi')),
+          body: Center(
+            child: Column(children: [
+              StreamBuilder<List<TabModel>>(
+                stream: Provider.of<TabViewModel>(context, listen: false)
+                    .getTabList(),
+                builder: (context, asyncSnapshot) {
+                  if (asyncSnapshot.hasError) {
+                    print(asyncSnapshot.error);
+                    return const Center(
+                        child: Text(
+                            'Bir Hata Oluştu, daha sonra tekrar deneyiniz'));
                   } else {
-                    List<TabModel>? kitapList = asyncSnapshot.data;
-                    if (kitapList != null) {
-                      return BuildListView(
-                        kitapList: kitapList,
-                        key: Key("a"),
-                      );
-                    } else {
+                    if (!asyncSnapshot.hasData) {
                       return CircularProgressIndicator();
+                    } else {
+                      List<TabModel>? tabList = asyncSnapshot.data;
+                      if (tabList != null) {
+                        return BuildListView(
+                          tabList: tabList,
+                          key: Key("a"),
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
                     }
                   }
-                }
-              },
-            ),
-            Divider(),
-          ]),
-        ),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddBookView()));
-            },
-            child: Icon(Icons.add)),
-      ),
+                },
+              )
+            ]),
+          )),
     );
   }
 }
@@ -66,58 +57,27 @@ class _BooksViewState extends State<BooksView> {
 class BuildListView extends StatefulWidget {
   const BuildListView({
     required Key key,
-    required this.kitapList,
+    required this.tabList,
   }) : super(key: key);
 
-  final List<TabModel> kitapList;
+  final List<TabModel> tabList;
 
   @override
   _BuildListViewState createState() => _BuildListViewState();
 }
 
 class _BuildListViewState extends State<BuildListView> {
-  bool isFiltering = false;
-  late List<TabModel> filteredList;
-
   @override
   Widget build(BuildContext context) {
-    var fullList = widget.kitapList;
+    var fullList = widget.tabList;
     return Flexible(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: TextField(
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Arama: Kitap adı',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.0))),
-              onChanged: (query) {
-                if (query.isNotEmpty) {
-                  isFiltering = true;
-
-                  setState(() {
-                    filteredList = fullList
-                        .where((book) => book.tabName
-                            .toLowerCase()
-                            .contains(query.toLowerCase()))
-                        .toList();
-                  });
-                } else {
-                  WidgetsBinding.instance!.focusManager.primaryFocus!.unfocus();
-                  setState(() {
-                    isFiltering = false;
-                  });
-                }
-              },
-            ),
-          ),
           Flexible(
             child: ListView.builder(
-                itemCount: isFiltering ? filteredList.length : fullList.length,
+                itemCount: fullList.length,
                 itemBuilder: (context, index) {
-                  var list = isFiltering ? filteredList : fullList;
+                  var list = fullList;
                   return Slidable(
                     child: Card(
                       child: ListTile(

@@ -6,7 +6,7 @@ class Database {
 
   /// Firestore servisinden kitapların verisini stream olarak alıp sağlamak
 
-  Stream<QuerySnapshot> getBookListFromApi(String referencePath) {
+  Stream<QuerySnapshot> getTabListFromApi(String referencePath) {
     return _firestore.collection(referencePath).snapshots();
   }
 
@@ -17,7 +17,7 @@ class Database {
   }
 
   /// firestore'a yeni veri ekleme ve güncelleme hizmeti
-  Future<void> setBookData(
+  Future<void> setTabData(
       {required String collectionPath,
       required Map<String, dynamic> bookAsMap}) async {
     await _firestore

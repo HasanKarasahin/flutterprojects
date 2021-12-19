@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:newsApp/data/news_service.dart';
 import 'package:newsApp/models/article.dart';
+import 'package:newsApp/models/news.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'dart:async';
@@ -17,6 +18,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: unused_import
 import 'dart:ui' as ui;
+
+import 'models/tab_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +37,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Haberler2'),
+      home: GetUserName("2021-12-18T02:14:34.992103"),
     );
   }
 }
@@ -47,29 +50,95 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+class GetUserName extends StatelessWidget {
+  final String documentId;
+
+  GetUserName(this.documentId);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('Tabs');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: users.doc(documentId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          print(snapshot);
+          return Text("Hata");
+        }
+
+        if (snapshot.hasData && !snapshot.data.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data.data() as Map<String, dynamic>;
+          return Text("Full Name: ${data['tabName']} ${data['tabUrl']}");
+        }
+
+        return Text("loading");
+      },
+    );
+  }
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   List<Articles> articles = [];
 
   void getTabName() async {
-    CollectionReference moviesRef = _firestore.collection("Settings");
+    CollectionReference moviesRef = _firestore.collection("Tabs");
+
+    // int countDoc = await moviesRef.snapshots().map((event) => null);
+
     var BottomNavBarNamesRef = moviesRef.doc("BottomNavBarNames");
     var response = await BottomNavBarNamesRef.get();
     dynamic data = response.data();
+/*
+    for (int i = 0; i < 2; i++) {
+      tabs[i] = data[data.id];
+    }*/
+  }
 
-    for (int i = 0; i < 3; i++) {
-      tabs[i] = data["Tab" + (i + 1).toString()];
-    }
+  Stream<List<TabModel>> getTabList() {
+    CollectionReference moviesRef = _firestore.collection("Tabs");
+
+    Stream<List<DocumentSnapshot>> streamListDocument =
+        moviesRef.snapshots().map((querySnapshot) => querySnapshot.docs);
+
+    ///Stream<List<DocumentSnapshot>> --> Stream<List<Book>>
+    Stream<List<TabModel>> streamListBook =
+        streamListDocument.map((listOfDocSnap) => listOfDocSnap
+            .map((docSnap) => TabModel.fromMap({
+                  "id": docSnap["id"],
+                  "tabName": docSnap["tabName"],
+                  "tabUrl": docSnap["tabUrl"],
+                  "tabIcon": docSnap["tabIcon"],
+                  tabs[0]: "a"
+                }))
+            .toList());
+
+    streamListBook.map((event) => {tabs[0]: "Deniz"});
+
+    tabs[1] = "Sadettin";
+    return streamListBook;
   }
 
   void getNewLink() async {
     CollectionReference moviesRef = _firestore.collection("Settings");
+
+    String t = await moviesRef.get().then((value) => value.docs.first.id);
+    print(t);
+
+/*
     var BottomNavBarNamesRef = moviesRef.doc("NewsLink");
     var response = await BottomNavBarNamesRef.get();
     dynamic data = response.data();
 
     for (int i = 0; i < 3; i++) {
-      tabsUrl[i] = data["Tab" + (i + 1).toString()];
-    }
+      tabsUrl[i] = "a";
+    }*/
   }
 
   @override
@@ -84,8 +153,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _firestore = FirebaseFirestore.instance;
 
-  List<String> tabs = ["", "", ""];
-  List<String> tabsUrl = ["", "", ""];
+  List<String> tabs = ["Hasolila", "Hasolila", "Hasolila"];
+  List<String> tabsUrl = [
+    "https://newsapi.org/v2/top-headlines?country=tr&category=business&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab",
+    "https://newsapi.org/v2/top-headlines?country=tr&category=business&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab",
+    "https://newsapi.org/v2/top-headlines?country=tr&category=business&apiKey=c17bc6c4ce594f04ab13d6937d5dfcab"
+  ];
 
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
@@ -102,10 +175,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    getTabName();
-    AsyncSnapshot.waiting();
-    getNewLink();
-    AsyncSnapshot.waiting();
+    //getNewLink();
+    //getTabList();
+    //AsyncSnapshot.waiting();
+    //getNewLink();
+    //AsyncSnapshot.waiting();
 
     return Scaffold(
       appBar: AppBar(

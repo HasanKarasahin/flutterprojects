@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "932639861756",
-    "project_id": "flutter-news-42dce",
-    "storage_bucket": "flutter-news-42dce.appspot.com"
+    "project_number": "914071141174",
+    "firebase_url": "https://flutter-news-7e2da-default-rtdb.firebaseio.com",
+    "project_id": "flutter-news-7e2da",
+    "storage_bucket": "flutter-news-7e2da.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:932639861756:android:d3be53bd16042014aba079",
+        "mobilesdk_app_id": "1:914071141174:android:66b896c0b6524260955197",
         "android_client_info": {
-          "package_name": "com.example.flutterfirebase"
+          "package_name": "com.example.newsApp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "932639861756-qovlo7oiq77r3strivvepvj1dm3uur0l.apps.googleusercontent.com",
+          "client_id": "914071141174-kfpi8afp06ca4088ildljkf7n70mgvhi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBqrJ1VsMTqDBGkoqEB2umiAmw9yDY6FQ8"
+          "current_key": "AIzaSyB8mv5BbDXXeQNijKfbIuMN6sCc4s88gfU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "932639861756-qovlo7oiq77r3strivvepvj1dm3uur0l.apps.googleusercontent.com",
+              "client_id": "914071141174-kfpi8afp06ca4088ildljkf7n70mgvhi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -36,27 +37,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:932639861756:android:49b8d6364d38c0fdaba079",
+        "mobilesdk_app_id": "1:914071141174:android:a30680fb2860f108955197",
         "android_client_info": {
-          "package_name": "com.example.newsApp"
+          "package_name": "com.example.newsappadminpanel"
         }
       },
       "oauth_client": [
         {
-          "client_id": "932639861756-qovlo7oiq77r3strivvepvj1dm3uur0l.apps.googleusercontent.com",
+          "client_id": "914071141174-kfpi8afp06ca4088ildljkf7n70mgvhi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBqrJ1VsMTqDBGkoqEB2umiAmw9yDY6FQ8"
+          "current_key": "AIzaSyB8mv5BbDXXeQNijKfbIuMN6sCc4s88gfU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "932639861756-qovlo7oiq77r3strivvepvj1dm3uur0l.apps.googleusercontent.com",
+              "client_id": "914071141174-kfpi8afp06ca4088ildljkf7n70mgvhi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

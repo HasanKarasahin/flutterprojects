@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:newsappadminpanel/models/tab_model.dart';
-import 'package:newsappadminpanel/services/calculator.dart';
 import 'package:newsappadminpanel/services/database.dart';
 
 class UpdateBookViewModel extends ChangeNotifier {
@@ -17,7 +16,7 @@ class UpdateBookViewModel extends ChangeNotifier {
         TabModel(id: book.id, tabName: tabName, tabUrl: tabUrl, tabIcon: "a");
 
     /// bu kitap bilgisini database servisi üzerinden Firestore'a yazacak
-    await _database.setBookData(
+    await _database.setTabData(
         collectionPath: collectionPath, bookAsMap: newBook.toMap());
   }
 }

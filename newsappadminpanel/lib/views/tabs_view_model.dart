@@ -3,21 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:newsappadminpanel/models/tab_model.dart';
 import 'package:newsappadminpanel/services/database.dart';
 
-class BooksViewModel extends ChangeNotifier {
-  /// bookview'ın state bilgisini tutmak
-  /// bookview arayüzünün ihtiyacı olan metotları ve hesaplamalrı yapmak
-  /// gerekli servislerle konuşmak
+class TabViewModel extends ChangeNotifier {
   String _collectionPath = 'Tabs';
 
   Database _database = Database();
 
-  Stream<List<TabModel>> getBookList() {
-    /// stream<QuerySnapshot> --> Stream<List<DocumentSnapshot>>
+  Stream<List<TabModel>> getTabList() {
     Stream<List<DocumentSnapshot>> streamListDocument = _database
-        .getBookListFromApi(_collectionPath)
+        .getTabListFromApi(_collectionPath)
         .map((querySnapshot) => querySnapshot.docs);
 
-    ///Stream<List<DocumentSnapshot>> --> Stream<List<Book>>
     Stream<List<TabModel>> streamListBook =
         streamListDocument.map((listOfDocSnap) => listOfDocSnap
             .map((docSnap) => TabModel.fromMap({

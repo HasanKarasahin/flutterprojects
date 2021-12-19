@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:newsappadminpanel/models/tab_model.dart';
-import 'package:newsappadminpanel/services/calculator.dart';
 import 'package:newsappadminpanel/views/update_tab_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -63,27 +62,6 @@ class _UpdateBookViewState extends State<UpdateBookView> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Yazar Adı Boş Olamaz';
-                      } else {
-                        return null;
-                      }
-                    }),
-                TextFormField(
-                    onTap: () async {
-                      _selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(-1000),
-                          lastDate: DateTime.now());
-
-                      publishCtr.text =
-                          Calculator.dateTimeToString(_selectedDate);
-                    },
-                    controller: publishCtr,
-                    decoration: InputDecoration(
-                        hintText: 'Basım Tarihi', icon: Icon(Icons.date_range)),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen Tarih Seçiniz';
                       } else {
                         return null;
                       }
