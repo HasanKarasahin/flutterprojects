@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'News - Admin Paneli',
+        title: 'Haber Kategorileri',
         theme: ThemeData(),
         home: FutureBuilder(
             future: _initialization,

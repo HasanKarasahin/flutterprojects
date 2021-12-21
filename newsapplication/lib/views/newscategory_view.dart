@@ -1,6 +1,6 @@
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:newsapplication/models/tab_model.dart';
-import 'package:newsapplication/views/tabs_view_model.dart';
+import 'package:newsapplication/models/newscategory_model.dart';
+import 'package:newsapplication/views/newscategory_view_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
@@ -16,16 +16,17 @@ class NewsCategoryView extends StatefulWidget {
 class _NewsCategoryViewState extends State<NewsCategoryView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TabViewModel>(
-      create: (_) => TabViewModel(),
+    return ChangeNotifierProvider<NewsCategoryViewModel>(
+      create: (_) => NewsCategoryViewModel(),
       builder: (context, child) => Scaffold(
           backgroundColor: Colors.grey[200],
           appBar: AppBar(title: Text('Haber Kategorileri')),
           body: Center(
             child: Column(children: [
-              StreamBuilder<List<TabModel>>(
-                stream: Provider.of<TabViewModel>(context, listen: false)
-                    .getTabList(),
+              StreamBuilder<List<NewsCategoryModel>>(
+                stream:
+                    Provider.of<NewsCategoryViewModel>(context, listen: false)
+                        .getCategoryList(),
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.hasError) {
                     return const Center(
@@ -35,10 +36,11 @@ class _NewsCategoryViewState extends State<NewsCategoryView> {
                     if (!asyncSnapshot.hasData) {
                       return CircularProgressIndicator();
                     } else {
-                      List<TabModel>? tabList = asyncSnapshot.data;
-                      if (tabList != null) {
+                      List<NewsCategoryModel>? listNewsCategoryModel =
+                          asyncSnapshot.data;
+                      if (listNewsCategoryModel != null) {
                         return BuildListView(
-                          tabList: tabList,
+                          listNewsCategoryModel: listNewsCategoryModel,
                           key: Key("a"),
                         );
                       } else {
@@ -57,10 +59,10 @@ class _NewsCategoryViewState extends State<NewsCategoryView> {
 class BuildListView extends StatefulWidget {
   const BuildListView({
     required Key key,
-    required this.tabList,
+    required this.listNewsCategoryModel,
   }) : super(key: key);
 
-  final List<TabModel> tabList;
+  final List<NewsCategoryModel> listNewsCategoryModel;
 
   @override
   _BuildListViewState createState() => _BuildListViewState();
@@ -69,7 +71,7 @@ class BuildListView extends StatefulWidget {
 class _BuildListViewState extends State<BuildListView> {
   @override
   Widget build(BuildContext context) {
-    var fullList = widget.tabList;
+    var fullList = widget.listNewsCategoryModel;
     return Flexible(
       child: Column(
         children: [
@@ -81,8 +83,8 @@ class _BuildListViewState extends State<BuildListView> {
                   return Slidable(
                     child: Card(
                       child: ListTile(
-                        title: Text(list[index].tabName),
-                        subtitle: Text(list[index].tabUrl),
+                        title: Text(list[index].categoryName),
+                        subtitle: Text(""),
                         onTap: () {
                           Navigator.push(
                               context,

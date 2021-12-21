@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:newsapplication/models/article.dart';
-import 'package:newsapplication/models/tab_model.dart';
+import 'package:newsapplication/models/newscategory_model.dart';
 import 'package:newsapplication/services/news_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsView extends StatefulWidget {
-  late TabModel tabInfo;
+  late NewsCategoryModel newsCategoryModel;
 
-  NewsView(this.tabInfo);
+  NewsView(this.newsCategoryModel);
 
   @override
   _NewsViewState createState() => _NewsViewState();
@@ -20,7 +20,7 @@ class _NewsViewState extends State<NewsView> {
 
   @override
   void initState() {
-    NewsService.getNews(widget.tabInfo).then((value) {
+    NewsService.getNews(widget.newsCategoryModel).then((value) {
       setState(() {
         articles = value!;
       });
@@ -32,7 +32,7 @@ class _NewsViewState extends State<NewsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.tabInfo.tabName}"),
+        title: Text("${widget.newsCategoryModel.categoryName}"),
         centerTitle: true,
       ),
       body: Center(
