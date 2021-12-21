@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'views/tabs_view.dart';
+import 'views/newscategory_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.hasError) {
                 return Center(child: Text('Beklenilmeyen Bir Hata Oluştu'));
               } else if (snapshot.hasData) {
-                return BooksView();
+                return NewsCategoryView();
               } else {
                 return Center(child: CircularProgressIndicator());
               }

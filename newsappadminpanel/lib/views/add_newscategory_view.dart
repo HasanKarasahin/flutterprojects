@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:newsappadminpanel/models/tab_model.dart';
-import 'package:newsappadminpanel/views/update_tab_view_model.dart';
+import 'package:newsappadminpanel/models/newscategory_model.dart';
+import 'package:newsappadminpanel/views/add_newscategory_view_model.dart';
+import 'package:newsappadminpanel/views/update_newscategory_view_model.dart';
 import 'package:provider/provider.dart';
 
-class UpdateBookView extends StatefulWidget {
-  final TabModel book;
-
-  const UpdateBookView(TabModel list, {required this.book});
-
+class AddNewsCategoryView extends StatefulWidget {
   @override
-  _UpdateBookViewState createState() => _UpdateBookViewState();
+  _AddNewsCategoryViewState createState() => _AddNewsCategoryViewState();
 }
 
-class _UpdateBookViewState extends State<UpdateBookView> {
-  TextEditingController bookCtr = TextEditingController();
+class _AddNewsCategoryViewState extends State<AddNewsCategoryView> {
+  TextEditingController newscategoryCtr = TextEditingController();
   TextEditingController authorCtr = TextEditingController();
   TextEditingController publishCtr = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -21,7 +18,7 @@ class _UpdateBookViewState extends State<UpdateBookView> {
 
   @override
   void dispose() {
-    bookCtr.dispose();
+    newscategoryCtr.dispose();
     authorCtr.dispose();
     publishCtr.dispose();
     super.dispose();
@@ -29,14 +26,10 @@ class _UpdateBookViewState extends State<UpdateBookView> {
 
   @override
   Widget build(BuildContext context) {
-    bookCtr.text = widget.book.tabName;
-    authorCtr.text = widget.book.tabUrl;
-    publishCtr.text = "a";
-
-    return ChangeNotifierProvider<UpdateBookViewModel>(
-      create: (_) => UpdateBookViewModel(),
+    return ChangeNotifierProvider<AddNewsCategoryViewModel>(
+      create: (_) => AddNewsCategoryViewModel(),
       builder: (context, _) => Scaffold(
-        appBar: AppBar(title: Text('Tab Bilgisini Güncelle')),
+        appBar: AppBar(title: Text('Haber Kategorisi Ekle')),
         body: Container(
           padding: EdgeInsets.all(15),
           child: Form(
@@ -45,12 +38,12 @@ class _UpdateBookViewState extends State<UpdateBookView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
-                    controller: bookCtr,
+                    controller: newscategoryCtr,
                     decoration: InputDecoration(
-                        hintText: 'Kitap Adı', icon: Icon(Icons.book)),
+                        hintText: 'Kategori Adı', icon: Icon(Icons.book)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Kitap Adı Boş Olamaz';
+                        return 'Kategori Adı Boş Olamaz';
                       } else {
                         return null;
                       }
@@ -58,27 +51,25 @@ class _UpdateBookViewState extends State<UpdateBookView> {
                 TextFormField(
                     controller: authorCtr,
                     decoration: InputDecoration(
-                        hintText: 'Yazar Adı', icon: Icon(Icons.edit)),
+                        hintText: 'Url', icon: Icon(Icons.link)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Yazar Adı Boş Olamaz';
+                        return 'Url Boş Olamaz';
                       } else {
                         return null;
                       }
                     }),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  child: Text('Güncelle'),
+                  child: Text('Ekle'),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      /// kulanıcı bilgileri ile addNewBook metodu çağırılacak,
-                      await context.read<UpdateBookViewModel>().updateBook(
-                          tabName: bookCtr.text,
-                          tabUrl: authorCtr.text,
-                          tabIcon: "a",
-                          book: widget.book);
-
-                      /// navigator.pop
+                      await context
+                          .read<AddNewsCategoryViewModel>()
+                          .addNewsCategory(
+                              categoryName: newscategoryCtr.text,
+                              categoryUrl: authorCtr.text,
+                              categoryIcon: "a");
                       Navigator.pop(context);
                     }
                   },

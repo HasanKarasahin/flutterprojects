@@ -1,30 +1,41 @@
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:newsappadminpanel/models/tab_model.dart';
-import 'package:newsappadminpanel/views/tabs_view_model.dart';
-import 'package:newsappadminpanel/views/update_tab_view.dart';
+import 'package:newsappadminpanel/models/newscategory_model.dart';
+import 'package:newsappadminpanel/views/newscategory_view_model.dart';
+import 'package:newsappadminpanel/views/update_newscategory_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-class BooksView extends StatefulWidget {
+import 'add_newscategory_view.dart';
+
+class NewsCategoryView extends StatefulWidget {
   @override
-  _BooksViewState createState() => _BooksViewState();
+  _NewsCategoryViewState createState() => _NewsCategoryViewState();
 }
 
-class _BooksViewState extends State<BooksView> {
+class _NewsCategoryViewState extends State<NewsCategoryView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TabViewModel>(
-      create: (_) => TabViewModel(),
+    return ChangeNotifierProvider<CategoryViewModel>(
+      create: (_) => CategoryViewModel(),
       builder: (context, child) => Scaffold(
           backgroundColor: Colors.grey[200],
-          appBar: AppBar(title: Text('Admin Paneli - Tab Listesi')),
+          appBar: AppBar(title: Text('Admin Paneli - Category Listesi')),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddNewsCategoryView()));
+            },
+            child: Icon(Icons.add),
+          ),
           body: Center(
             child: Column(children: [
-              StreamBuilder<List<TabModel>>(
-                stream: Provider.of<TabViewModel>(context, listen: false)
-                    .getTabList(),
+              StreamBuilder<List<NewsCategoryModel>>(
+                stream: Provider.of<CategoryViewModel>(context, listen: false)
+                    .getCategoryList(),
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.hasError) {
                     print(asyncSnapshot.error);
@@ -35,10 +46,11 @@ class _BooksViewState extends State<BooksView> {
                     if (!asyncSnapshot.hasData) {
                       return CircularProgressIndicator();
                     } else {
-                      List<TabModel>? tabList = asyncSnapshot.data;
-                      if (tabList != null) {
+                      List<NewsCategoryModel>? categoryList =
+                          asyncSnapshot.data;
+                      if (categoryList != null) {
                         return BuildListView(
-                          tabList: tabList,
+                          categoryList: categoryList,
                           key: Key("a"),
                         );
                       } else {
@@ -47,7 +59,8 @@ class _BooksViewState extends State<BooksView> {
                     }
                   }
                 },
-              )
+              ),
+              Divider()
             ]),
           )),
     );
@@ -57,10 +70,10 @@ class _BooksViewState extends State<BooksView> {
 class BuildListView extends StatefulWidget {
   const BuildListView({
     required Key key,
-    required this.tabList,
+    required this.categoryList,
   }) : super(key: key);
 
-  final List<TabModel> tabList;
+  final List<NewsCategoryModel> categoryList;
 
   @override
   _BuildListViewState createState() => _BuildListViewState();
@@ -69,7 +82,7 @@ class BuildListView extends StatefulWidget {
 class _BuildListViewState extends State<BuildListView> {
   @override
   Widget build(BuildContext context) {
-    var fullList = widget.tabList;
+    var fullList = widget.categoryList;
     return Flexible(
       child: Column(
         children: [
@@ -81,15 +94,15 @@ class _BuildListViewState extends State<BuildListView> {
                   return Slidable(
                     child: Card(
                       child: ListTile(
-                        title: Text(list[index].tabName),
-                        subtitle: Text(list[index].tabUrl),
+                        title: Text(list[index].categoryName),
+                        subtitle: Text(list[index].categoryUrl),
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => UpdateBookView(
+                                  builder: (context) => UpdateNewsCategoryView(
                                         list[index],
-                                        book: list[index],
+                                        newscategory: list[index],
                                       )));
                         },
                       ),
